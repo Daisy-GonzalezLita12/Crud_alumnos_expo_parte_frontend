@@ -3,11 +3,8 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
-
-// Pantallas de navegación
-import HomeScreens from "../Screens/Homescreens";
-import SettingsScreens from "../Screens/SettingsScreen";
-import  StackScreen from "../Screens/StackScreen";
+import SettingsScreens from "../screens/SettingsScreen";
+import  StackScreen from "../screens/StackScreen";
 
 const Tab = createBottomTabNavigator();
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { View, TextInput, TouchableOpacity, StyleSheet, Text } from "react-native";
 import api from "../Services/Api";
 
 export default function UsuariosScreen() {
@@ -7,26 +7,24 @@ export default function UsuariosScreen() {
   const [apellido, setApellido] = useState("");
   const [carrera, setCarrera] = useState("");
   const [email, setEmail] = useState("");
-  const [imagenURL, setImagen] = useState("");
-  const [numeroControl, setNumeroControl] = useState("");
+  const [imagenurl, setImagen] = useState("");
+  const [numero_control, setNumeroControl] = useState("");
   const [telefono, setTelefono] = useState("");
 
+  // Insertar alumno
   const addAlumno = async () => {
-    if (!nombre || !apellido || !email) {
-      Alert.alert("Error", "Por favor, complete los campos requeridos.");
-      return;
-    }
     try {
       await api.post("/alumnos/insertar-alumnos", {
         nombre,
         apellido,
         carrera,
         email,
-        imagenURL,
-        numeroControl,
-        telefono,
+        imagenurl,
+        numero_control,
+        telefono
       });
 
+      // Limpiar inputs después de registrar
       setNombre("");
       setApellido("");
       setCarrera("");
@@ -35,10 +33,10 @@ export default function UsuariosScreen() {
       setNumeroControl("");
       setTelefono("");
 
-      Alert.alert("Éxito", "Alumno agregado correctamente");
+      alert("Alumno agregado correctamente!");
     } catch (error) {
       console.error("Error al agregar alumno:", error.message);
-      Alert.alert("Error", "No se pudo agregar el alumno");
+      alert("No se pudo agregar el alumno.");
     }
   };
 
@@ -57,53 +55,73 @@ export default function UsuariosScreen() {
         style={styles.input}
       />
       <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Imagen URL"
-        value={imagenURL}
-        onChangeText={setImagen}
-        style={styles.input}
-      />
-      <TextInput
         placeholder="Carrera"
         value={carrera}
         onChangeText={setCarrera}
         style={styles.input}
       />
       <TextInput
-        placeholder="Número de control"
-        value={numeroControl}
+        placeholder="Correo Electrónico"
+        keyboardType="email-address"
+        value={email}
+        onChangeText={setEmail}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="Imagen URL"
+        value={imagenurl}
+        onChangeText={setImagen}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="Número de Control"
+        keyboardType="numeric"
+        value={numero_control}
         onChangeText={setNumeroControl}
         style={styles.input}
       />
       <TextInput
         placeholder="Teléfono"
+        keyboardType="phone-pad"
         value={telefono}
         onChangeText={setTelefono}
         style={styles.input}
       />
-      <Button title="Agregar" onPress={addAlumno} />
-      <View style={{ marginTop: 10 }}>
-        <Button
-          title="Ver lista de alumnos"
-          onPress={() => navigation.navigate("ListaAlumnos")}
-        />
-      </View>
+
+      <TouchableOpacity style={styles.botonConIcono} onPress={addAlumno}>
+        <Text style={styles.textoBoton}>Agregar alumno</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#f0f4f7'
+  },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
+    borderColor: '#aaa',
+    borderRadius: 15,
+    padding: 10,
     marginBottom: 10,
-    padding: 8,
+    backgroundColor: '#fff'
   },
+  botonConIcono: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#1f62ff',
+    paddingVertical: 12,
+    borderRadius: 15,
+    width: '100%',
+    marginBottom: 15,
+    elevation: 3
+  },
+  textoBoton: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16
+  }
 });
