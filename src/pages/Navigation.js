@@ -4,20 +4,21 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import SettingsScreens from "../screens/SettingsScreen";
-import  StackScreen from "../screens/StackScreen";
+import StackScreen from "../screens/StackScreen";
+import MenuPrincipal from "../screens/MenuPrincipal";
+import UserScreen from "../screens/UserScreen"
+
 
 const Tab = createBottomTabNavigator();
+const HomeStackNavigator = createNativeStackNavigator();
 
-const HomeStackNavigator= createNativeStackNavigator();
-// 
+// Stack Navigator para manejar pantallas dentro del stack si lo necesitas
 function MyStack() {
   return (
-    <HomeStackNavigator.Navigator
-    initialRouteName="Home"
-    >
+    <HomeStackNavigator.Navigator initialRouteName="MenuPrincipal">
       <HomeStackNavigator.Screen
-        name="Home"
-        component={HomeScreens}
+        name="MenuPrincipal"
+        component={MenuPrincipal}
       />
       <HomeStackNavigator.Screen
         name="Stack"
@@ -27,28 +28,37 @@ function MyStack() {
   );
 }
 
-
+// Tab Navigator con navegación garantizada al menú principal
 function MyTabs() {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="MenuPrincipal"
       screenOptions={{
-        tabBarActiveTintColor: 'purple', // Color de la pestaña activa
-        tabBarInactiveTintColor: 'gray',  // Color de las pestañas inactivas
+        tabBarActiveTintColor: 'purple',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: {
+      backgroundColor: "#8ba6ac",         // color de fondo de la barra de tabs
+    },
       }}
     >
       <Tab.Screen
-        name="Home"
-        component={HomeScreens}
-        options={{
-          tabBarLabel: 'Feed',
-          tabBarIcon: () => (
-           <MaterialIcons name="home" size={24} color="black" />
+        name="MenuPrincipal"
+        component={MenuPrincipal}
+        options={({ navigation }) => ({
+          tabBarLabel: 'Inicio',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons
+              name="home"
+              color={color}
+              size={size}
+              onPress={() => navigation.navigate("MenuPrincipal")}
+            />
           ),
-          tabBarBadge:3,
           headerShown: false,
-        }}
+          tabBarBadge: 3,
+        })}
       />
+
       <Tab.Screen
         name="Settings"
         component={SettingsScreens}
@@ -57,15 +67,15 @@ function MyTabs() {
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="settings" color={color} size={size} />
           ),
-           
-          tabBarBadge:3,
           headerShown: false,
+          tabBarBadge: 3,
         }}
       />
     </Tab.Navigator>
   );
 }
 
+// NavigationContainer principal
 export default function Navigation() {
   return (
     <NavigationContainer>

@@ -18,16 +18,18 @@ export default function HomePrincipal({ navigation }) {
       />
 
       {/* Botón para continuar */}
-    <TouchableOpacity onPress={() => navigation.navigate("MainTabs", { screen: "Home" })}>
-  <Text style={styles.linkText}>Comenzar</Text>
-</TouchableOpacity>      
+      <TouchableOpacity onPress={() => navigation.navigate("MainTabs")}>
+        <Text style={styles.linkText}>Comenzar</Text>
+      </TouchableOpacity>
+
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
+    flex: 1,
     backgroundColor: "#1E88E5", // 🔹 azul educativo en toda la pantalla
     alignItems: "center",
     justifyContent: "center",
@@ -55,17 +57,17 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     textAlign: "center",
   },
-  descripcionApp:{
-  color:"#ffffff",
-  fontWeight: "bold",
-  fontSize: 15,
+  descripcionApp: {
+    color: "#ffffff",
+    fontWeight: "bold",
+    fontSize: 15,
   },
   linkText: {
-  color: "#FFFFFF",       // blanco
-  fontSize: 18,
-  fontWeight: "bold",
-  textDecorationLine: "underline", // subrayado
-  marginTop: 20,
-},
+    color: "#FFFFFF",       // blanco
+    fontSize: 18,
+    fontWeight: "bold",
+    textDecorationLine: "underline", // subrayado
+    marginTop: 20,
+  },
 
 });

@@ -11,4 +11,4 @@ import { StyleSheet, Text, View } from 'react-native';
     );
 }
 
- StackScreen;
+  export default StackScreen;

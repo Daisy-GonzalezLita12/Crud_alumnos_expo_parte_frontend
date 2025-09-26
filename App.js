@@ -1,21 +1,29 @@
 import * as React from "react";
+import { TouchableOpacity } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { TouchableOpacity } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
-// tus pantallas
-import HomeScreen from "./src/screens/HomeScreens";
+// Pantallas
 import HomePrincipal from "./src/pages/Home/HomePrincipal";
-import UserScreen from "./src/screens/UserScreen";
+import MenuPrincipal from "./src/screens/MenuPrincipal";
+import UserScreen from "./src/screens/UserScreen"
 import SettingsScreens from "./src/screens/SettingsScreen";
+import ListaAlumnosScreen from "./src/screens/ListaAlumnosScreen";
+import AsistenciaScreen from "./src/screens/AsistenciaScreen"
+import ReportesScreen from "./src/screens/ReportesScreen"
+import EventosScreen from "./src/screens/EventosScreen"
+import ResumenScreen from "./src/screens/ResumenScreen"
+import InfoScreen from "./src/screens/InfoScreen"
+
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function MyTabs() {
+// Tabs de la app
+function MainTabs() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -24,23 +32,24 @@ function MyTabs() {
       }}
     >
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="MenuPrincipal"
+        component={MenuPrincipal}
         options={{
           tabBarLabel: "Inicio",
-          tabBarIcon: ({ color }) => (
-            <MaterialIcons name="home" size={24} color={color} />
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="home" color={color} size={size} />
           ),
           headerShown: false,
         }}
       />
+
       <Tab.Screen
         name="Settings"
         component={SettingsScreens}
         options={{
           tabBarLabel: "Ajustes",
-          tabBarIcon: ({ color }) => (
-            <MaterialIcons name="settings" size={24} color={color} />
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="cog" color={color} size={size} />
           ),
           headerShown: false,
         }}
@@ -52,38 +61,57 @@ function MyTabs() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        {/* Pantalla de bienvenida */}
+      <Stack.Navigator initialRouteName="HomePrincipal">
+        {/* Pantalla de inicio */}
         <Stack.Screen
-          name="Inicio"
+          name="HomePrincipal"
           component={HomePrincipal}
           options={{ headerShown: false }}
         />
 
-        {/* Navegación principal (tabs) */}
+        {/* Tabs principales */}
         <Stack.Screen
           name="MainTabs"
-          component={MyTabs}
+          component={MainTabs}
           options={{ headerShown: false }}
         />
-
-        {/* Pantallas extra */}
         <Stack.Screen
           name="UserScreen"
           component={UserScreen}
-          options={({ navigation }) => ({
-            title: "Usuario",
-            headerTitleAlign: "center",
-            headerBackVisible: false,
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{ marginLeft: 10 }}
-              >
-                <FontAwesome name="arrow-left" size={24} color="#000" />
-              </TouchableOpacity>
-            ),
-          })}
+          options={{ title: "Alumnos" }}
+        />
+         <Stack.Screen
+          name="ListaAlumnosScreen"
+          component={ListaAlumnosScreen}
+          options={{ title: "Lista Alumnos" }}
+        />
+         <Stack.Screen
+          name="AsistenciaScreen"
+          component={AsistenciaScreen}
+          options={{ title: "Asistencia " }}
+        />
+        <Stack.Screen
+          name="ReportesScreen"
+          component={ReportesScreen}
+          options={{ title: "Reporte" }}
+        />
+                <Stack.Screen
+          name="EventosScreen"
+          component={EventosScreen}
+          options={{ title: "Eventos Académicos" }}
+        />
+
+        
+                <Stack.Screen
+          name="ResumenScreen"
+          component={ResumenScreen}
+          options={{ title: "Resumen Escolar" }}
+        />
+
+              <Stack.Screen
+          name="InfoScreen"
+          component={InfoScreen}
+          options={{ title: "Datos escolares" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

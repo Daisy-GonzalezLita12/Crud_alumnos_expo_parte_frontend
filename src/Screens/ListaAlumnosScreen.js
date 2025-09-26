@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, Button, StyleSheet, Alert } from "react-native";
+import React, { useEffect, useState } from "react"; 
+import { View, Text, FlatList, StyleSheet, Image } from "react-native";
 import api from "../Services/Api";
 
 export default function ListaAlumnosScreen({ navigation }) {
@@ -11,91 +11,80 @@ export default function ListaAlumnosScreen({ navigation }) {
       setAlumnos(res.data);
     } catch (error) {
       console.error("Error al cargar alumnos:", error.message);
-      Alert.alert("Error", "No se pudieron cargar los alumnos");
-    }
-  };
-
-  const deleteAlumno = async (id) => {
-    try {
-      await api.delete(`/alumnos/eliminar-alumnos/${id}`);
-      fetchAlumnos();
-      Alert.alert("Éxito", "Alumno eliminado correctamente");
-    } catch (error) {
-      console.error("Error al eliminar alumno:", error.message);
-      Alert.alert("Error", "No se pudo eliminar el alumno");
     }
   };
 
   useEffect(() => {
-    // Refrescar alumnos cada vez que la pantalla tiene foco
-    const unsubscribe = navigation.addListener("focus", () => {
-      fetchAlumnos();
-    });
+    const unsubscribe = navigation.addListener("focus", fetchAlumnos);
     return unsubscribe;
   }, [navigation]);
 
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={alumnos}
-        keyExtractor={(item) =>
-          item.id?.toString() || item.numeroControl?.toString()
-        }
-        contentContainerStyle={{ paddingVertical: 10 }}
-        renderItem={({ item }) => (
-          <View style={styles.alumnoContainer}>
-            <Text style={styles.field}>
-              <Text style={styles.label}>Nombre:</Text> {item.nombre}
-            </Text>
-            <Text style={styles.field}>
-              <Text style={styles.label}>Apellido:</Text> {item.apellido}
-            </Text>
-            <Text style={styles.field}>
-              <Text style={styles.label}>Email:</Text> {item.email}
-            </Text>
-            <Text style={styles.field}>
-              <Text style={styles.label}>Carrera:</Text> {item.carrera}
-            </Text>
-            <Text style={styles.field}>
-              <Text style={styles.label}>Número de control:</Text>{" "}
-              {item.numeroControl}
-            </Text>
-            <Text style={styles.field}>
-              <Text style={styles.label}>Teléfono:</Text> {item.telefono}
-            </Text>
-            <Text style={styles.field}>
-              <Text style={styles.label}>Imagen:</Text> {item.imagenURL}
-            </Text>
-            <Button
-              title="Eliminar"
-              onPress={() =>
-                Alert.alert(
-                  "Confirmar",
-                  "¿Desea eliminar este alumno?",
-                  [
-                    { text: "Cancelar", style: "cancel" },
-                    { text: "Eliminar", onPress: () => deleteAlumno(item.id) },
-                  ]
-                )
-              }
-            />
-          </View>
-        )}
-      />
+  const renderItem = ({ item }) => (
+    <View style={styles.card}>
+      {item.imagenURL ? (
+        <Image source={{ uri: item.imagenURL }} style={styles.imagen} />
+      ) : (
+        <View style={[styles.imagen, styles.placeholder]}>
+          <Text style={{ color: "#fff" }}>No Image</Text>
+        </View>
+      )}
+
+      <View style={styles.info}>
+        <Text style={styles.nombre}>{item.nombre} {item.apellido}</Text>
+        <Text style={styles.text}>Carrera: {item.carrera}</Text>
+        <Text style={styles.text}>Email: {item.email}</Text>
+        <Text style={styles.text}>Teléfono: {item.telefono}</Text>
+        <Text style={styles.text}>Número de control: {item.numeroControl}</Text>
+      </View>
     </View>
+  );
+
+  return (
+    <FlatList
+      data={alumnos}
+      keyExtractor={(item) => item.id?.toString() || item.numeroControl?.toString()}
+      contentContainerStyle={{ padding: 16 }}
+      renderItem={renderItem}
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
-  alumnoContainer: {
-    borderWidth: 1,
-    borderColor: "#aaa",
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 12,
-    backgroundColor: "#f9f9f9",
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 2 },
   },
-  field: { marginBottom: 4 },
-  label: { fontWeight: "bold" },
+  imagen: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginRight: 12,
+  },
+  placeholder: {
+    backgroundColor: "#aaa",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  info: {
+    flex: 1,
+  },
+  nombre: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 4,
+    color: "#1E88E5",
+  },
+  text: {
+    fontSize: 14,
+    marginBottom: 2,
+  },
 });
